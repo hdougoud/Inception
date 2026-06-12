@@ -50,3 +50,6 @@ Temporary Items
 *.icloud
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux
+#
+secrets/*
+!secrets/.gitkeep #ensures that a file is not ignored
