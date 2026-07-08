@@ -4,7 +4,6 @@ services:
     image: nginx
     container_name: nginx
     ports:
-      - 8080:80
       - 8443:443
     volumes:
       - ./requirements/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
