@@ -1,25 +1,33 @@
 services:
 
+  #TODO:
+  # - change the volumes locations
+  # - add a Dockerfile for MariaDB
+  # - add HTTPS for Nginx
+
   nginx:
     build:
       context: requirements/nginx
     container_name: nginx
     ports:
-      - 8443:443
+      - 8080:80
+      # - 8443:443
     volumes:
       - ./requirements/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
-      - wordpress:/var/www/html
+      # - wordpress:/usr/share/nginx/html
+      - wordpress:/usr/share/wordpress
+    depends_on:
+      - wordpress
     restart: unless-stopped
     networks:
       - ft-network
 
   wordpress:
-    image: wordpress
+    build:
+      context: requirements/wordpress
     container_name: wordpress
-    ports:
-      - 8081:80
     volumes:
-      - wordpress:/var/www/html
+      - wordpress:/usr/share/wordpress
     depends_on:
       - mariadb
     restart: unless-stopped
