@@ -1,7 +1,12 @@
 #!/bin/bash
 
+#install wordpress
+wget https://wordpress.org/wordpress-7.0.tar.gz
+tar xvfz wordpress-7.0.tar.gz
+rm -rf wordpress-7.0.tar.gz
+sudo chown -R www-data:www-data /var/www/html/wordpress
 
-#FIX:
+#DEBUG: print acces by nginx in a logfile
 touch /var/log/php-fpm8.access.log
 sed -i 's|;access.log = .*|access.log = /var/log/php-fpm8.access.log|' /etc/php/8.2/fpm/pool.d/www.conf
 

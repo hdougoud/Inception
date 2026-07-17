@@ -15,7 +15,7 @@ services:
     volumes:
       - ./requirements/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
       # - wordpress:/usr/share/nginx/html
-      - wordpress:/usr/share/wordpress
+      - wordpress:/var/www/html/wordpress
     depends_on:
       - wordpress
     restart: unless-stopped
@@ -27,7 +27,7 @@ services:
       context: requirements/wordpress
     container_name: wordpress
     volumes:
-      - wordpress:/usr/share/wordpress
+      - wordpress:/var/www/html/wordpress
     depends_on:
       - mariadb
     restart: unless-stopped
