@@ -1,7 +1,7 @@
 FROM debian:bookworm
-WORKDIR /etc/nginx
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y nginx openssl
+RUN apt-get update && apt-get upgrade -y && apt-get install -y nginx openssl && rm -rf /var/lib/apt/lists
+WORKDIR /etc/nginx
 
 #According to the Docker documentation, it is best practice to declare the command using the ENTRYPOINT and CMD keywords for the flags
 ENTRYPOINT [ "nginx" ]
