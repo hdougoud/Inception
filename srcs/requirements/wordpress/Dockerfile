@@ -2,7 +2,7 @@ FROM debian:bookworm
 
 WORKDIR /var/www/html
 
-RUN apt-get update && apt-get upgrade -y && apt-get install wget php-fpm -y
+RUN apt-get update && apt-get upgrade -y && apt-get install wget php-fpm php-mysql -y
 COPY ./tools/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
