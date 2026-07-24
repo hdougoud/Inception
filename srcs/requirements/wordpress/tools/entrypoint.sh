@@ -17,21 +17,21 @@ wp_dir=/var/www/wordpress
 
 wp  --allow-root core download \
     --version=$wp_version \
-    --path=$wp_dir
+    --path=$wp_dir \
 
 wp  --allow-root config create \
-    --dbname="exampledb" \
-    --dbuser="exampleuser" \
-    --dbpass="examplepass" \
-    --dbhost="mariadb:3306"
+    --dbname=$WORDPRESS_DB_NAME\
+    --dbuser=$WORDPRESS_DB_USER \
+    --dbpass=$WORDPRESS_DB_PASSWORD \
+    --dbhost=$WORDPRESS_DB_HOST
 
 #Create admin user and wordpress site
 wp  --allow-root core install \
-    --url="http://localhost:8080" \
-    --title="Inception" \
-    --admin_user="hdougoud" \
-    --admin_password="SecretPassword" \
-    --admin_email="wpmail@wpcli.com" \
+    --url=$WORDPRESS_URL \
+    --title=$WORDPRESS_SITE_TITLE \
+    --admin_user=$ADMIN_USER \
+    --admin_password=$ADMIN_PASSWORD \
+    --admin_email=$ADMIN_EMAIL \
     --skip-email
 
 #Exec PHP-FPM in foreground mode

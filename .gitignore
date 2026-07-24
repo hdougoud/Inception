@@ -52,4 +52,4 @@ Temporary Items
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux
 #
 secrets/*
-!secrets/.gitkeep #ensures that a file is not ignored
+!secrets/.gitkeep
