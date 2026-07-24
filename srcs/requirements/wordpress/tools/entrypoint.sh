@@ -35,6 +35,5 @@ wp  --allow-root core install \
     --skip-email
 
 #Exec PHP-FPM in foreground mode
-#TODO: use exec @
-exec /usr/sbin/php-fpm8.2 -F
+exec "$@"
 
