@@ -34,8 +34,9 @@ services:
       - ft-network
     env_file:
       - ".env"
-      - "../secrets/db_password.txt"
-      - "../secrets/wp_admin_password.txt"
+    secrets:
+      - db_password
+      - wordpress_admin_password
 
   mariadb:
     image: mariadb
@@ -64,3 +65,10 @@ volumes:
 
 networks:
   ft-network:
+
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  wordpress_admin_password:
+    file: ../secrets/wp_admin_password.txt
+

@@ -19,18 +19,19 @@ wp  --allow-root core download \
     --version=$wp_version \
     --path=$wp_dir \
 
+#Create wp-config.php file with database credentials
 wp  --allow-root config create \
     --dbname=$WORDPRESS_DB_NAME\
     --dbuser=$WORDPRESS_DB_USER \
-    --dbpass=$WORDPRESS_DB_PASSWORD \
+    --dbpass=$(/bin/bash -c "cat /run/secrets/db_password") \
     --dbhost=$WORDPRESS_DB_HOST
 
 #Create admin user and wordpress site
 wp  --allow-root core install \
-    --url=$WORDPRESS_URL \
-    --title=$WORDPRESS_SITE_TITLE \
+    --url=$DOMAIN_NAME\
+    --title=$WORDPRESS_SITE_TITLE\
     --admin_user=$ADMIN_USER \
-    --admin_password=$ADMIN_PASSWORD \
+    --admin_password=$(/bin/bash -c "cat /run/secrets/wordpress_admin_password") \
     --admin_email=$ADMIN_EMAIL \
     --skip-email
 
