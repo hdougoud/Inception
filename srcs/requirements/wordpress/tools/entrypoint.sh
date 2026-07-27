@@ -1,15 +1,5 @@
 #!/bin/bash
 
-#Import GPG key and verify signature
-curl -sSO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar.asc
-curl -sSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/wp-cli.pgp | gpg --import -q
-if ! gpg --verify wp-cli.phar.asc wp-cli.phar >/dev/null 2>&1; then
-  echo "GPG signature verification failed. Exiting."
-  exit 1
-fi
-rm -rf wp-cli.phar.asc
-chmod +x wp-cli.phar
-mv wp-cli.phar /usr/local/bin/wp
 
 #Install wordpress and Database configuration
 wp_version="7.0.2"
