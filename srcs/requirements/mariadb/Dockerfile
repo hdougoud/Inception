@@ -14,6 +14,10 @@ COPY ./conf/mariadb.conf /etc/mysql/mariadb.conf.d/50-server.cnf
 COPY ./tools/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh && chown mysql:mysql /etc/mysql/mariadb.conf.d/50-server.cnf
 
+#Copy the official healthcheck script
+COPY ./tools/healthcheck.sh /usr/local/bin/healthcheck.sh
+RUN chmod +x /usr/local/bin/healthcheck.sh
+
 #Init and start Mariadb
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["mariadbd"]
