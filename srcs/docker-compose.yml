@@ -55,6 +55,8 @@ services:
       - ft-network
     env_file:
       - ".env"
+    secrets:
+      - db_password
 
 #TODO: puts the volumes in /home/login/data folder
 volumes:
@@ -66,7 +68,8 @@ networks:
 
 secrets:
   db_password:
-    file: ../secrets/db_password.txt
+    file: ../secrets/user_db_password.txt
   wordpress_admin_password:
     file: ../secrets/wp_admin_password.txt
+
 
