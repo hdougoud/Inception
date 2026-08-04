@@ -1,8 +1,6 @@
 FROM debian:bookworm
 WORKDIR /var/www/wordpress
 
-RUN apt-get update && apt-get upgrade -y && apt-get install curl gpg php-fpm php-mysql --no-install-recommends -y && rm -rf /var/lib/apt/lists/*
-RUN curl -Of https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
 #Fail the build if any command in a pipeline fails
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
