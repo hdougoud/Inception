@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#Exit the script if a command fails or an environment variable has not been initialised
+set -eo pipefail
 
 #Install wordpress and Database configuration
 wp_version="7.0.2"
