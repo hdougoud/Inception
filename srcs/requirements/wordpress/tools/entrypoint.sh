@@ -11,8 +11,8 @@ wp  --allow-root core download \
 
 #Create wp-config.php file with database credentials
 wp  --allow-root config create \
-    --dbname=$WORDPRESS_DB_NAME\
-    --dbuser=$WORDPRESS_DB_USER \
+    --dbname=$DB_NAME \
+    --dbuser=$DB_USER \
     --dbpass=$(/bin/bash -c "cat /run/secrets/db_password") \
     --dbhost=$WORDPRESS_DB_HOST
 
