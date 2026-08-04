@@ -1,7 +1,7 @@
 FROM debian:bookworm
-
-RUN apt-get update && apt-get upgrade -y && apt-get install -y nginx openssl && rm -rf /var/lib/apt/lists
 WORKDIR /etc/nginx
+
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends nginx openssl && rm -rf /var/lib/apt/lists/*
 
 COPY ./conf/inception_ssl.cnf inception_ssl.cnf
 RUN openssl req -x509 -nodes -days 365 \

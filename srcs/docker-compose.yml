@@ -1,10 +1,5 @@
 services:
 
-  #TODO:
-  # - change the volumes locations
-  # - add a Dockerfile for MariaDB
-  # - add HTTPS for Nginx
-
   nginx:
     build:
       context: requirements/nginx

@@ -6,8 +6,12 @@ RUN curl -Of https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cl
 
 #Fail the build if any command in a pipeline fails
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-#Import GPG key and verify wp-cli signature
-RUN curl -Of https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar.asc && \
+
+
+RUN apt-get update && apt-get upgrade -y && apt-get install curl ca-certificates gpg gpg-agent php-fpm php-mysql -y --no-install-recommends && rm -rf /var/lib/apt/lists/* && \
+    curl -Of https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    #Import GPG key and verify wp-cli signature
+    curl -Of https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar.asc && \
     curl -Lf https://raw.githubusercontent.com/wp-cli/builds/gh-pages/wp-cli.pgp | gpg --import -q && \
     gpg --verify wp-cli.phar.asc wp-cli.phar && \
     chmod +x wp-cli.phar && \

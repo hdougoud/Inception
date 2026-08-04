@@ -49,6 +49,6 @@ else
   echo "MariaDB already initialized"
 fi
 
-echo "starting mariadb"
 #Exec MariaDB in foreground mode
+echo "starting mariadb"
 exec gosu mysql "$@"
