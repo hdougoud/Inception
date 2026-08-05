@@ -55,6 +55,16 @@ services:
       - db_password
       - db_root_password
 
+#---Bonus---
+
+  redis:
+    build:
+      context: requirements/bonus/redis
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - ft-network
+
 #TODO: puts the volumes in /home/login/data folder
 volumes:
   mariadb:
