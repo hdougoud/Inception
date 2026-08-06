@@ -8,6 +8,9 @@ RUN apt-get update && apt-get upgrade -y && apt-get install lsb-release curl ca-
     apt-get update && \
     apt-get install redis -y
 
+COPY ./conf/redis.conf /etc/redis/redis.conf
+
 ENTRYPOINT ["redis-server"]
+CMD ["/etc/redis/redis.conf"]
 
 EXPOSE 6379

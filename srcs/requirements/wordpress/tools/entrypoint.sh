@@ -26,6 +26,15 @@ wp  --allow-root core install \
     --admin_password=$(/bin/bash -c "cat /run/secrets/wordpress_admin_password") \
     --admin_email=$ADMIN_EMAIL \
     --skip-email
+  #Create admin user and wordpress site
+  #Install the redis plugin
+  wp --allow-root plugin install redis-cache
+  wp --allow-root config set WP_REDIS_HOST "redis"
+  wp --allow-root config set WP_REDIS_PORT "6379"
+  #Give ownership of wordpress files to www-data user and group
+  chown -R www-data:www-data $wp_dir
+  chmod 755 $wp_dir
+  wp --allow-root plugin activate redis-cache
 
 #Exec PHP-FPM in foreground mode
 exec "$@"

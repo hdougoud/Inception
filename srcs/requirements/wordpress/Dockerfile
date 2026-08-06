@@ -1,12 +1,10 @@
 FROM debian:bookworm
 WORKDIR /var/www/wordpress
 
-
 #Fail the build if any command in a pipeline fails
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-
-RUN apt-get update && apt-get upgrade -y && apt-get install curl ca-certificates gpg gpg-agent php-fpm php-mysql -y --no-install-recommends && rm -rf /var/lib/apt/lists/* && \
+RUN apt-get update && apt-get upgrade -y && apt-get install curl ca-certificates gpg gpg-agent php-fpm php-mysql php-redis -y --no-install-recommends && rm -rf /var/lib/apt/lists/* && \
     curl -Of https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     #Import GPG key and verify wp-cli signature
     curl -Of https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar.asc && \
@@ -22,5 +20,3 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/sbin/php-fpm8.2" ,"-F"]
-
-EXPOSE 9000
