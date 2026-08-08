@@ -65,13 +65,29 @@ services:
     networks:
       - ft-network
 
+  adminer:
+    build:
+      context: requirements/bonus/adminer
+    container_name: adminer
+    restart: unless-stopped
+    networks:
+      - ft-network
+    ports:
+      - 8080:8080
+
+#---volumes--- 
+
 #TODO: puts the volumes in /home/login/data folder
 volumes:
   mariadb:
   wordpress:
 
+#---Networks---
+
 networks:
   ft-network:
+
+#---Secrets---
 
 secrets:
   db_root_password:
