@@ -73,6 +73,19 @@ services:
     networks:
       - ft-network
 
+  vsftpd:
+    build:
+      context: requirements/bonus/vsftpd
+    container_name: vsftpd
+    volumes:
+      - wordpress:/var/www/wordpress
+    restart: unless-stopped
+    networks:
+      - ft-network
+    ports:
+      - 20:20
+      - 21:21
+
 #---volumes--- 
 
 #TODO: puts the volumes in /home/login/data folder
