@@ -72,8 +72,6 @@ services:
     restart: unless-stopped
     networks:
       - ft-network
-    ports:
-      - 8080:8080
 
 #---volumes--- 
 
