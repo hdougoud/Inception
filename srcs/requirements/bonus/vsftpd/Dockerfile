@@ -6,7 +6,6 @@ RUN apt-get update && apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /var/run/vsftpd/empty
 
-
 COPY ./conf/vsftpd.conf /etc/vsftpd/vsftpd.conf
 COPY ./tools/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
