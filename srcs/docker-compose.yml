@@ -90,7 +90,18 @@ services:
       - ".env"
     secrets:
       - ftp_password
-      
+
+  portainer:
+    build:
+      context: requirements/bonus/portainer
+    container_name: portainer
+    restart: unless-stopped
+    networks:
+      - ft-network
+    ports:
+      - 9443:9443
+    secrets:
+      - portainer_admin_password
 
 #---volumes--- 
 
@@ -115,5 +126,7 @@ secrets:
     file: ../secrets/wp_admin_password.txt
   ftp_password:
     file: ../secrets/ftp_password.txt
+  portainer_admin_password:
+    file: ../secrets/portainer_admin_password.txt
 
 
