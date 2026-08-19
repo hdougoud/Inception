@@ -65,6 +65,7 @@ services:
   redis:
     build:
       context: requirements/bonus/redis
+    image: redis
     container_name: redis
     restart: unless-stopped
     networks:
@@ -73,6 +74,7 @@ services:
   adminer:
     build:
       context: requirements/bonus/adminer
+    image: adminer
     container_name: adminer
     restart: unless-stopped
     networks:
@@ -81,6 +83,7 @@ services:
   vsftpd:
     build:
       context: requirements/bonus/vsftpd
+    image: vsftpd
     container_name: vsftpd
     volumes:
       - wordpress:/var/www/wordpress
@@ -99,6 +102,7 @@ services:
   portainer:
     build:
       context: requirements/bonus/portainer
+    image: portainer
     container_name: portainer
     restart: unless-stopped
     volumes:
