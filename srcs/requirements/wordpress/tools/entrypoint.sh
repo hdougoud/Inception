@@ -26,10 +26,14 @@ if ! wp --allow-root core is-installed 2>/dev/null; then
   wp  --allow-root core install \
       --url=$DOMAIN_NAME\
       --title=$WORDPRESS_SITE_TITLE\
-      --admin_user=$ADMIN_USER \
+      --admin_user=$WP_ADMIN_USER \
       --admin_password=$(/bin/bash -c "cat /run/secrets/wordpress_admin_password") \
-      --admin_email=$ADMIN_EMAIL \
+      --admin_email=$WP_ADMIN_EMAIL \
       --skip-email
+
+  wp  --allow-root user create $WP_USER $WP_EMAIL \
+      --role=author \
+      --user_pass=$(/bin/bash -c "cat /run/secrets/wordpress_user_password")
 
   #Install the redis plugin
   wp --allow-root plugin install redis-cache
@@ -45,6 +49,7 @@ if ! wp --allow-root core is-installed 2>/dev/null; then
 else
   echo "Wordpress is already installed"
 fi
+
 
 #Exec PHP-FPM in foreground mode
 echo "Starting PHP-FPM"

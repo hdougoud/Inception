@@ -1,8 +1,10 @@
+name: Inception
 services:
 
   nginx:
     build:
       context: requirements/nginx
+    image: nginx
     container_name: nginx
     ports:
       - 443:443
@@ -19,6 +21,7 @@ services:
   wordpress:
     build:
       context: requirements/wordpress
+    image: wordpress
     container_name: wordpress
     volumes:
       - wordpress:/var/www/wordpress
@@ -33,10 +36,12 @@ services:
     secrets:
       - db_password
       - wordpress_admin_password
+      - wordpress_user_password
 
   mariadb:
     build:
       context: requirements/mariadb
+    image: mariadb
     container_name: mariadb
     volumes:
       - mariadb:/var/lib/mysql
@@ -128,6 +133,8 @@ secrets:
     file: ../secrets/user_db_password.txt
   wordpress_admin_password:
     file: ../secrets/wp_admin_password.txt
+  wordpress_user_password:
+    file: ../secrets/wordpress_user_password.txt
   ftp_password:
     file: ../secrets/ftp_password.txt
   portainer_admin_password:
