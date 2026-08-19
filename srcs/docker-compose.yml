@@ -96,6 +96,9 @@ services:
       context: requirements/bonus/portainer
     container_name: portainer
     restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
     networks:
       - ft-network
     ports:
@@ -109,6 +112,7 @@ services:
 volumes:
   mariadb:
   wordpress:
+  portainer_data:
 
 #---Networks---
 
