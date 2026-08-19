@@ -22,10 +22,14 @@ wp  --allow-root config create \
 wp  --allow-root core install \
     --url=$DOMAIN_NAME\
     --title=$WORDPRESS_SITE_TITLE\
-    --admin_user=$ADMIN_USER \
+    --admin_user=$WP_ADMIN_USER \
     --admin_password=$(/bin/bash -c "cat /run/secrets/wordpress_admin_password") \
-    --admin_email=$ADMIN_EMAIL \
+    --admin_email=$WP_ADMIN_EMAIL \
     --skip-email
+
+wp  --allow-root user create $WP_USER $WP_EMAIL \
+    --role=author \
+    --user_pass=$(/bin/bash -c "cat /run/secrets/wordpress_user_password")
 
 #Exec PHP-FPM in foreground mode
 exec "$@"

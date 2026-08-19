@@ -34,6 +34,7 @@ services:
     secrets:
       - db_password
       - wordpress_admin_password
+      - wordpress_user_password
 
   mariadb:
     build:
@@ -71,5 +72,7 @@ secrets:
     file: ../secrets/user_db_password.txt
   wordpress_admin_password:
     file: ../secrets/wp_admin_password.txt
+  wordpress_user_password:
+    file: ../secrets/wordpress_user_password.txt
 
 
