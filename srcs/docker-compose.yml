@@ -115,6 +115,17 @@ services:
     secrets:
       - portainer_admin_password
 
+  static-website:
+    build:
+      context: requirements/bonus/static-website
+    #image: static-website
+    container_name: static-website
+    restart: unless-stopped
+    networks:
+      - ft-network
+    ports:
+      - 8080:8080
+
 #---volumes--- 
 
 #TODO: puts the volumes in /home/login/data folder
