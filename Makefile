@@ -1,6 +1,22 @@
 COMPOSE_FILE = srcs/docker-compose.yml
+SECRETS_DIR = secrets
+HOSTNAME=hdougoud.42.fr
 
-all: up
+all: host secrets up
+
+host:
+	@if ! grep -qE "127.0.0.1 $(HOSTNAME)" /etc/hosts; then \
+		echo "add 127.0.0.1 $(HOSTNAME) to /etc/hosts"; \
+		echo "127.0.0.1 $(HOSTNAME)" | sudo tee -a /etc/hosts > /dev/null; \
+	fi
+
+secrets:
+	@openssl rand -base64 32 | tr -dc 'A-Za-z0-9@%^*_+=-' | head -c 16 > $(SECRETS_DIR)/db_root_password.txt
+	@openssl rand -base64 32 | tr -dc 'A-Za-z0-9@%^*_+=-' | head -c 16 > $(SECRETS_DIR)/ftp_password.txt
+	@openssl rand -base64 32 | tr -dc 'A-Za-z0-9@%^*_+=-' | head -c 16 > $(SECRETS_DIR)/portainer_admin_password.txt
+	@openssl rand -base64 32 | tr -dc 'A-Za-z0-9@%^*_+=-' | head -c 16 > $(SECRETS_DIR)/user_db_password.txt
+	@openssl rand -base64 32 | tr -dc 'A-Za-z0-9@%^*_+=-' | head -c 16 > $(SECRETS_DIR)/wordpress_user_password.txt
+	@openssl rand -base64 32 | tr -dc 'A-Za-z0-9@%^*_+=-' | head -c 16 > $(SECRETS_DIR)/wp_admin_password.txt
 
 build:
 	docker compose -f $(COMPOSE_FILE) build
@@ -19,5 +35,4 @@ fclean:
 
 re: fclean build up
 
-.PHONY: all build up down clean fclean re
-
+.PHONY: host secrets all build up down clean fclean re
