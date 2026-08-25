@@ -2,13 +2,12 @@ COMPOSE_FILE = srcs/docker-compose.yml
 SECRETS_DIR = secrets
 HOSTNAME=hdougoud.42.fr
 
-all: set_host up
+all: host secrets up
 
 host:
 	@if ! grep -qE "127.0.0.1 $(HOSTNAME)" /etc/hosts; then \
+		echo "add 127.0.0.1 $(HOSTNAME) to /etc/hosts"; \
 		echo "127.0.0.1 $(HOSTNAME)" | sudo tee -a /etc/hosts > /dev/null; \
-	else \
-		echo "$(HOSTNAME) already exists in /etc/hosts"; \
 	fi
 
 secrets:
