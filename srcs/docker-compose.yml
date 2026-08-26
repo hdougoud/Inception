@@ -126,19 +126,19 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /home/hdougoud/data
+      device: /Users/hayden/data/
   wordpress:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: /home/hdougoud/data
+      device: /Users/hayden/data/
   portainer_data:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: /home/hdougoud/data
+      device: /Users/hayden/data/
 
 #---Networks---
 
