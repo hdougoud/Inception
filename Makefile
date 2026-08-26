@@ -1,14 +1,20 @@
-COMPOSE_FILE = srcs/docker-compose.yml
-SECRETS_DIR = secrets
-HOSTNAME=hdougoud.42.fr
+COMPOSE_FILE	= srcs/docker-compose.yml
+SECRETS_DIR		= secrets
+HOSTNAME 			= hdougoud.42.fr
+VOLUMES_DIR 	= /home/hdougoud/data
 
-all: host secrets up
+all: host directory secrets up
 
 host:
 	@if ! grep -qE "127.0.0.1 $(HOSTNAME)" /etc/hosts; then \
 		echo "add 127.0.0.1 $(HOSTNAME) to /etc/hosts"; \
 		echo "127.0.0.1 $(HOSTNAME)" | sudo tee -a /etc/hosts > /dev/null; \
 	fi
+
+directory:
+	@mkdir -p $(VOLUMES_DIR)/wordpress
+	@mkdir -p $(VOLUMES_DIR)/mariadb
+	@mkdir -p $(VOLUMES_DIR)/portainer
 
 secrets:
 	@openssl rand -base64 32 | tr -dc 'A-Za-z0-9@%^*_+=-' | head -c 16 > $(SECRETS_DIR)/db_root_password.txt
@@ -35,4 +41,4 @@ fclean:
 
 re: fclean build up
 
-.PHONY: host secrets all build up down clean fclean re
+.PHONY: host secrets directory all build up down clean fclean re
