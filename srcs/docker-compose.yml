@@ -4,7 +4,6 @@ services:
   nginx:
     build:
       context: requirements/nginx
-    image: nginx
     container_name: nginx
     ports:
       - 443:443
@@ -21,7 +20,6 @@ services:
   wordpress:
     build:
       context: requirements/wordpress
-    image: wordpress
     container_name: wordpress
     volumes:
       - wordpress:/var/www/wordpress
@@ -41,7 +39,6 @@ services:
   mariadb:
     build:
       context: requirements/mariadb
-    image: mariadb
     container_name: mariadb
     volumes:
       - mariadb:/var/lib/mysql
@@ -65,7 +62,6 @@ services:
   redis:
     build:
       context: requirements/bonus/redis
-    image: redis
     container_name: redis
     restart: unless-stopped
     networks:
@@ -74,7 +70,6 @@ services:
   adminer:
     build:
       context: requirements/bonus/adminer
-    image: adminer
     container_name: adminer
     restart: unless-stopped
     networks:
@@ -83,7 +78,6 @@ services:
   vsftpd:
     build:
       context: requirements/bonus/vsftpd
-    image: vsftpd
     container_name: vsftpd
     volumes:
       - wordpress:/var/www/wordpress
@@ -102,7 +96,6 @@ services:
   portainer:
     build:
       context: requirements/bonus/portainer
-    image: portainer
     container_name: portainer
     restart: unless-stopped
     volumes:
@@ -118,7 +111,6 @@ services:
   static-website:
     build:
       context: requirements/bonus/static-website
-    image: static-website
     container_name: static-website
     restart: unless-stopped
     networks:
