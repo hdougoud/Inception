@@ -126,19 +126,19 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /home/hdougoud/data
+      device: /home/hdougoud/data/mariadb
   wordpress:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: /home/hdougoud/data
+      device: /home/hdougoud/data/wordpress
   portainer_data:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: /home/hdougoud/data
+      device: /home/hdougoud/data/portainer
 
 #---Networks---
 
