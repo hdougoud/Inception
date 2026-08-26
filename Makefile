@@ -38,6 +38,7 @@ clean:
 
 fclean:
 	docker compose -f $(COMPOSE_FILE) down --rmi all --volumes --remove-orphans
+	sudo rm -rf $(VOLUMES_DIR)/*
 
 re: fclean build up
 
