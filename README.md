@@ -30,6 +30,7 @@ network and backed by persistent named volumes.
 | Adminer | Lightweight web UI to inspect/manage the MariaDB database | debian:bookworm | via NGINX `/adminer` |
 | vsftpd | FTP server giving access to the WordPress volume | debian:bookworm | 20, 21, 10090-10100 (host) |
 | Portainer | Web UI to manage/monitor the whole Docker stack, built from source | debian:bookworm | 9443 (host) |
+| static-website | Small static site to browse this README, `USER_DOC.md` and `DEV_DOC.md` as HTML pages | debian:bookworm | 8080 (host) |
 
 ## Instructions
 
@@ -94,7 +95,9 @@ All the project sources live under `srcs/`:
   configuration, and a `tools/` folder with the entrypoint script(s) used to
   initialize and start the service.
 - `srcs/requirements/bonus/` — one directory per bonus service (`redis`,
-  `adminer`, `vsftpd`, `portainer`), following the exact same layout.
+  `adminer`, `vsftpd`, `portainer`, `static-website`), following the exact
+  same layout. `static-website/tools/www/` holds the pre-built HTML/CSS
+  pages served by that container (see "Main design choices" below).
 - `secrets/` (git-ignored, only a `.gitkeep` is versioned) — one file per
   password, referenced as Docker secrets by the services that need them.
   These files don't exist in a fresh checkout; the `secrets` Makefile
@@ -120,6 +123,13 @@ All the project sources live under `srcs/`:
 - **Secrets never baked into images**: passwords are never written in a
   Dockerfile or committed to the repository; they are only injected at
   runtime through Docker secrets (see below).
+- **static-website is a plain snapshot, not a converter**: `README.md`,
+  `USER_DOC.md` and `DEV_DOC.md` were converted to HTML by hand once, and
+  the resulting pages live directly under
+  `srcs/requirements/bonus/static-website/tools/www/`. The container just
+  serves those files as-is (Python's built-in `http.server`), with no
+  Markdown parsing at build or run time. If the three `.md` files change,
+  the HTML pages must be regenerated and committed again to stay in sync.
 
 ### Virtual Machines vs Docker
 

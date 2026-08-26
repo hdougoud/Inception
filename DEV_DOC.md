@@ -105,6 +105,18 @@ docker compose -f srcs/docker-compose.yml build wordpress
 docker compose -f srcs/docker-compose.yml up -d --no-deps wordpress
 ```
 
+### Updating the docs bonus site
+
+`srcs/requirements/bonus/static-website/tools/www/` contains hand-written
+HTML/CSS pages (`index.html`, `user_doc.html`, `dev_doc.html`) that mirror
+this README, `USER_DOC.md` and `DEV_DOC.md`. They are **not** generated
+automatically at build time — the container only serves these files as-is.
+If you edit any of the three `.md` files, remember to update the matching
+HTML page(s) by hand and rebuild the `static-website` image
+(`docker compose -f srcs/docker-compose.yml build static-website`),
+otherwise the docs site will drift out of sync with the actual `.md`
+files.
+
 ## 3. Managing containers and volumes
 
 Useful `docker compose` commands (run from the repository root, always

@@ -18,6 +18,7 @@ through a single web address, `https://hdougoud.42.fr`:
 | Portainer | Web page to see and manage all the running containers | `https://<machine-ip-or-domain>:9443` |
 | FTP server | Upload/download the WordPress site files | connect with any FTP client on port `21` |
 | Redis | Speeds up the website (page/object cache) | internal only, nothing to open |
+| Project docs (static site) | Browse this guide, the README and the developer doc as web pages | `http://<machine-ip-or-domain>:8080` |
 
 Behind the scenes, the website is served by NGINX, the WordPress
 application runs in its own container, and its data lives in a MariaDB
@@ -80,6 +81,11 @@ automatically if one of them crashes.
 - **FTP access**: connect any FTP client to the machine's address on port
   `21`, using the FTP account described below, to browse and edit the
   WordPress website files directly.
+- **Project documentation**: open `http://<host>:8080` to read this guide,
+  the README and the developer documentation as web pages, with a side
+  menu to switch between the three. Note this one is plain `http://`, not
+  `https://` — it isn't routed through NGINX/TLS like the rest of the
+  stack.
 
 There are two WordPress accounts created automatically:
 
