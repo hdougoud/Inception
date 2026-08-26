@@ -1,6 +1,6 @@
 FROM debian:bookworm AS downloader
 
-ARG NODE_VERSION=v24.19.0-linux-arm64
+ARG NODE_VERSION=v24.19.0-linux-x64
 
 ENV PATH="/usr/local/node/bin:${PATH}"
 
