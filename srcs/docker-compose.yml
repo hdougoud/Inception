@@ -128,11 +128,25 @@ services:
 
 #---volumes--- 
 
-#TODO: puts the volumes in /home/login/data folder
 volumes:
   mariadb:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      devices: /home/hdougoud/data
   wordpress:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      devices: /home/hdougoud/data
   portainer_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      devices: /home/hdougoud/data
 
 #---Networks---
 
