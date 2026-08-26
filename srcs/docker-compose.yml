@@ -118,7 +118,7 @@ services:
   static-website:
     build:
       context: requirements/bonus/static-website
-    #image: static-website
+    image: static-website
     container_name: static-website
     restart: unless-stopped
     networks:

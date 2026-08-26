@@ -2,7 +2,7 @@ FROM debian:bookworm
 WORKDIR /app
 
 COPY ./tools/app.py /app/app.py
-COPY ./tools/www/* /app/
+COPY ./tools/www/ /app/
 
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \

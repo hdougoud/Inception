@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="css/style.css">
+
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inception stack user documentation</title>
+</head>
+<div class="sidenav">
+  <a href="index.html">README</a>
+  <a href="user_doc.html">USER DOC</a>
+  <a href="dev_doc.html">DEV DOC</a>
+</div>
+<body>
+
+<h1 id="user-documentation">User documentation</h1>
+<p>This document is for anyone who wants to <strong>use or
+administer</strong> the Inception stack once it is deployed — it does
+not require any Docker or development knowledge. If you want to build
+the project or modify its configuration, see <code>DEV_DOC.md</code>
+instead.</p>
+<h2 id="what-this-stack-provides">1. What this stack provides</h2>
+<p>Starting the project brings up several independent services, all
+reachable through a single web address,
+<code>https://hdougoud.42.fr</code>:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it’s for</th>
+<th>How you reach it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Website (WordPress)</td>
+<td>The public website</td>
+<td><code>https://hdougoud.42.fr</code></td>
+</tr>
+<tr>
+<td>WordPress admin panel</td>
+<td>Manage pages, posts, users, plugins</td>
+<td><code>https://hdougoud.42.fr/wp-admin</code></td>
+</tr>
+<tr>
+<td>Adminer</td>
+<td>Web page to inspect/edit the database directly</td>
+<td><code>https://hdougoud.42.fr/adminer</code></td>
+</tr>
+<tr>
+<td>Portainer</td>
+<td>Web page to see and manage all the running containers</td>
+<td><code>https://&lt;machine-ip-or-domain&gt;:9443</code></td>
+</tr>
+<tr>
+<td>FTP server</td>
+<td>Upload/download the WordPress site files</td>
+<td>connect with any FTP client on port <code>21</code></td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>Speeds up the website (page/object cache)</td>
+<td>internal only, nothing to open</td>
+</tr>
+</tbody>
+</table>
+<p>Behind the scenes, the website is served by NGINX, the WordPress
+application runs in its own container, and its data lives in a MariaDB
+database — but as a user you never need to talk to those directly.</p>
+<h2 id="starting-and-stopping-the-project">2. Starting and stopping the
+project</h2>
+<p>All commands below are run from the root of the repository (where the
+<code>Makefile</code> is), on the machine hosting the project.</p>
+<p><strong>First time only:</strong></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span>          <span class="co"># add the domain to /etc/hosts, generate the passwords, build and start everything</span></span></code></pre></div>
+<p>This first run will ask for your <code>sudo</code> password once (to
+register the <code>hdougoud.42.fr</code> domain locally) and creates the
+password files used by every service — nothing needs to be prepared by
+hand beforehand.</p>
+<p><strong>Every other time</strong>, start and stop the stack without
+touching the domain entry or the passwords again:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> up       <span class="co"># start every service</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> down     <span class="co"># stop every service, keep all data</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> clean    <span class="co"># stop every service and remove the built images</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> fclean   <span class="co"># stop everything and also delete the stored data (volumes)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> re       <span class="co"># fclean + rebuild + start again (fresh install, keeps existing passwords)</span></span></code></pre></div>
+<blockquote>
+<p>⚠️ Don’t run plain <code>make</code> (or <code>make all</code>) again
+after the first successful start: it would generate brand new random
+passwords and overwrite the ones already in use inside
+WordPress/MariaDB, locking you out. If you really want to reset
+everything including the passwords, you need to also wipe the current
+WordPress/database data (<code>make fclean</code>) before running
+<code>make</code> again.</p>
+</blockquote>
+<p>Give the services a few seconds to initialize on first start (the
+database and the website are being set up automatically). Once it’s up,
+the site stays available until you run <code>make down</code>,
+<code>make clean</code>, or <code>make fclean</code>, or until the
+machine reboots — the containers are configured to restart automatically
+if one of them crashes.</p>
+<h2 id="accessing-the-website-and-the-administration-panel">3. Accessing
+the website and the administration panel</h2>
+<ul>
+<li><strong>Public website</strong>: open
+<code>https://hdougoud.42.fr</code> in a browser. The connection uses a
+self-signed certificate, so the browser will show a security warning the
+first time — this is expected, you can proceed.</li>
+<li><strong>WordPress admin panel</strong>: go to
+<code>https://hdougoud.42.fr/wp-admin</code> and log in with the
+administrator account (see below for how to set its password). From
+there you can write posts, manage plugins, and configure the site like
+any WordPress install.</li>
+<li><strong>Database viewer (Adminer)</strong>: go to
+<code>https://hdougoud.42.fr/adminer</code> to browse the WordPress
+database. Use the database credentials described below.</li>
+<li><strong>Container manager (Portainer)</strong>: go to
+<code>https://&lt;host&gt;:9443</code> to see the status of every
+container, view their logs, and restart them from a web UI. Log in with
+the Portainer admin password (see below).</li>
+<li><strong>FTP access</strong>: connect any FTP client to the machine’s
+address on port <code>21</code>, using the FTP account described below,
+to browse and edit the WordPress website files directly.</li>
+</ul>
+<p>There are two WordPress accounts created automatically:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Role</th>
+<th>Username (env var)</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Administrator</td>
+<td><code>WP_ADMIN_USER</code> (see <code>srcs/.env</code>)</td>
+<td>Full control of the site</td>
+</tr>
+<tr>
+<td>Author</td>
+<td><code>WP_USER</code> (see <code>srcs/.env</code>)</td>
+<td>Can write/edit its own content only</td>
+</tr>
+</tbody>
+</table>
+<h2 id="locating-and-managing-credentials">4. Locating and managing
+credentials</h2>
+<p>No password is ever written in plain text in the project’s
+configuration files or committed to Git, and none of them exist in a
+fresh copy of the repository — they are generated automatically the
+first time you run <code>make</code> (see <a
+href="#2-starting-and-stopping-the-project">Starting and stopping the
+project</a>). Credentials live in two places:</p>
+<ul>
+<li><p><strong><code>srcs/.env</code></strong> — non-sensitive settings
+only: domain name, database name, usernames, site title, email
+addresses. Safe to read, contains no passwords.</p></li>
+<li><p><strong><code>secrets/</code> folder</strong> — one plain-text
+file per password, created by <code>make</code> with a random value and
+mounted read-only inside the container that needs it:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Password for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>secrets/wp_admin_password.txt</code></td>
+<td>WordPress administrator account</td>
+</tr>
+<tr>
+<td><code>secrets/wordpress_user_password.txt</code></td>
+<td>WordPress author account</td>
+</tr>
+<tr>
+<td><code>secrets/user_db_password.txt</code></td>
+<td>Database user (<code>DB_USER</code>)</td>
+</tr>
+<tr>
+<td><code>secrets/db_root_password.txt</code></td>
+<td>Database root account</td>
+</tr>
+<tr>
+<td><code>secrets/ftp_password.txt</code></td>
+<td>FTP account (<code>FTP_USER</code>)</td>
+</tr>
+<tr>
+<td><code>secrets/portainer_admin_password.txt</code></td>
+<td>Portainer admin account</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<p>To find or change a credential:</p>
+<ol type="1">
+<li>Open the corresponding file in <code>secrets/</code> on the host
+machine to read the current password (it is created there automatically
+by <code>make</code> on first run — you don’t need to create it
+yourself).</li>
+<li>To change one, edit the file’s content, then recreate the affected
+container(s) with <code>make down &amp;&amp; make up</code> (a plain
+restart is not enough, since some passwords are only applied the very
+first time a service initializes its data). Do <strong>not</strong> use
+plain <code>make</code>/<code>make all</code> for this, as it would
+regenerate every other password too.</li>
+</ol>
+<p>The <code>secrets/</code> folder is excluded from Git (only a
+placeholder file is versioned), so these passwords never end up in the
+project’s history.</p>
+<h2 id="checking-that-the-services-are-running-correctly">5. Checking
+that the services are running correctly</h2>
+<p>From the host machine, in the project’s root directory:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">-f</span> srcs/docker-compose.yml ps</span></code></pre></div>
+<p>This lists every service with its current status. A healthy stack
+shows all containers as <code>Up</code> (MariaDB additionally shows
+<code>healthy</code> once its startup check has passed).</p>
+<p>To look at what a specific service is doing or to diagnose a problem,
+read its logs:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">-f</span> srcs/docker-compose.yml logs nginx</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">-f</span> srcs/docker-compose.yml logs wordpress</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">-f</span> srcs/docker-compose.yml logs mariadb</span></code></pre></div>
+<p>(replace the service name with <code>redis</code>,
+<code>adminer</code>, <code>vsftpd</code>, or <code>portainer</code> for
+the bonus services). You can also open Portainer
+(<code>https://&lt;host&gt;:9443</code>) to see the same status and logs
+from a web interface instead of the command line.</p>
+<p>If the website itself is unreachable, first confirm the domain
+resolves to the right machine (e.g. <code>ping hdougoud.42.fr</code>),
+then check that the <code>nginx</code> container is <code>Up</code> with
+the command above.</p>
+
+</body>
+</html>
